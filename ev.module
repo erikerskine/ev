@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function ev_menu() {
+  return array(
+    'ev/%/%/%' => array(
+      'page callback' => '_ev_display_entity',
+      'page arguments' => array(1, 2, 3),
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+    ),
+  );
+}
+
+
+function _ev_display_entity($entity_type, $id, $view_mode) {
+  $entity = entity_load_single($entity_type, $id);
+  if (!$entity) {
+    drupal_not_found();
+    return array();
+  }
+
+  if (module_exists('devel')) {
+    dpm($entity);
+  }
+
+  drupal_set_title(t('Here is %entity_type @id shown using the %view_mode view mode:', array(
+    '%entity_type' => $entity_type,
+    '@id' => $id,
+    '%view_mode' => $view_mode,
+  )), PASS_THROUGH);
+
+  $output = entity_view($entity_type, array($entity), $view_mode);
+  $output['#prefix'] = '<div style="border: 1px dotted red">';
+  $output['#suffix'] = '</div>';
+  return $output;
+}

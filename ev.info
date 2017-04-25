@@ -1,0 +1,6 @@
+name = Entity viewer
+type = module
+core = 7.x
+description = Provides a quick way to view a single entity in a particular view mode.
+
+dependencies[] = entity
